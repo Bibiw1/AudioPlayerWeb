@@ -1,0 +1,190 @@
+<html>
+<head>
+<style>
+html, body {
+margin: 0px;
+padding:30px 0;
+width:100%;
+height:100%;
+font-family: Arial;
+text-align:center;
+}
+body{
+background-color: #000000;
+}
+
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script>
+var response;
+var songers;
+var songersarray = new Array();
+var selectedSonger="";
+var selectedAlbum="";
+var selectedTrack="";
+var firsttime = true;
+function nextTrack(){
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("POST","",true);
+xmlhttp.send("nextTrack");
+}
+
+function songersList(){
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("POST","",true);
+xmlhttp.send("getSongers");
+xmlhttp.onreadystatechange = function() {
+	if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+		songers = xmlhttp.responseText;
+	}
+	var indexof=0;
+	songersarray = new Array();
+	while(indexof!=1){
+	if(songers.slice(indexof,songers.indexOf("\r\n",indexof))!= ""){
+		songersarray.push(songers.slice(indexof,songers.indexOf("\r\n",indexof)));
+	}
+	indexof = songers.indexOf("\r\n",indexof)+2;
+}
+var list = document.getElementById("listSongers");
+list.innerHTML="";
+for(var i in songersarray){
+	list.options[list.options.length] = new Option(songersarray[i], songersarray[i]);
+}
+}
+setTimeout(songersChange,400);
+}
+function albumsList(){
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("POST","",true);
+xmlhttp.send("getAlbum - " + selectedSonger);
+xmlhttp.onreadystatechange = function() {//Call a function when the state changes.
+	if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+		songers = xmlhttp.responseText;
+	}
+	var indexof=0;
+	songersarray = new Array();
+	while(indexof!=1){
+	if(songers.slice(indexof,songers.indexOf("\r\n",indexof))!= ""){
+		songersarray.push(songers.slice(indexof,songers.indexOf("\r\n",indexof)));
+	}
+	indexof = songers.indexOf("\r\n",indexof)+2;
+}
+var list = document.getElementById("listAlbums");
+list.innerHTML="";
+for(var i in songersarray){
+	list.options[list.options.length] = new Option(songersarray[i], songersarray[i]);
+}
+}
+setTimeout(albumsChange,400);
+}
+function getNameTrack(){
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("POST","",true);
+xmlhttp.send("getNameT");
+var oldresp = response;
+xmlhttp.onreadystatechange = function() {//Call a function when the state changes.
+	if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+		response = xmlhttp.responseText + "  ----------- ";
+		if (response != oldresp){
+			document.getElementById('gi').innerHTML=response;
+		}
+	}
+}
+}
+function setVolume(){
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("POST","",true);
+xmlhttp.send("setVolum" + document.getElementById("volume").value);
+}
+function pause(){
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("POST","",true);
+xmlhttp.send("plyorstp");
+}
+function songsList(){
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("POST","",true);
+xmlhttp.send("getTrack - " + selectedSonger + " - " + selectedAlbum);
+xmlhttp.onreadystatechange = function() {//Call a function when the state changes.
+	if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+		songers = xmlhttp.responseText;
+	}
+	var indexof=0;
+	songersarray = new Array();
+	while(indexof!=1){
+	if(songers.slice(indexof,songers.indexOf("\r\n",indexof))!= ""){
+		songersarray.push(songers.slice(indexof,songers.indexOf("\r\n",indexof)));
+	}
+	indexof = songers.indexOf("\r\n",indexof)+2;
+}
+var list = document.getElementById("listSongs");
+list.innerHTML="";
+for(var i in songersarray){
+	list.options[list.options.length] = new Option(songersarray[i], songersarray[i]);
+}
+}
+setTimeout(trackChange,400);
+}
+
+function playTrack(){
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("POST","",true);
+	xmlhttp.send("playTrack - " + selectedSonger + " - " + selectedAlbum + " - " + selectedTrack);
+	getNameTrack();
+}
+function songersChange(){
+	selectedSonger = document.getElementById("listSongers").value;
+	albumsList();
+	firsttime =true;
+}
+function albumsChange(){
+	selectedAlbum = document.getElementById("listAlbums").value;
+	songsList();
+	firsttime =true;
+}
+function trackChange(){
+	selectedTrack = document.getElementById("listSongs").value;
+	if(!firsttime){
+		playTrack();
+	}
+	firsttime = false;
+}
+songersList();
+getNameTrack();
+
+var interval = setInterval(function(){
+	getNameTrack();
+},2000);
+
+</script>
+</head>
+<body>
+<table border = "1px"><tr><td>
+<table width="50%" border = "1px" border-color = "#00D600">
+<tr width="50%"><td width="50%">
+<select style="border-radius: 3px;border: 1px solid #00D600;background:#000000;color: #00D600" id = "listSongers" onchange="songersChange()">
+</select></td>
+</tr>
+
+<tr width="50%"><td width="50%">
+<select style="border-radius: 3px;border: 1px solid #00D600;background:#000000;color: #00D600" id = "listAlbums" onchange="albumsChange()">
+</select></td>
+</tr>
+
+<tr width="50%"><td width="50%">
+<select style="border-radius: 3px;border: 1px solid #00D600;background:#000000;color: #00D600" id = "listSongs" onchange="trackChange()">
+</select></td>
+</tr>
+</table>
+</td><td>
+<table border = "1px" cellpadding = "15 px"><tr><td>
+<marquee  scrollamount="4" id="gi" behavior="scroll" style="border-radius: 3px;border: 1px solid #00D600;width:600px;height:24px;font-size:17px;color:#00D600;background-color:#000000;" loop="infinite" >Пример бегущей строки.</marquee>
+</td></tr><tr><td><div style = "color: #00D600; text-align: center;"> Громкость:
+<input style = " background:#000000;-webkit-appearance: none;border: 1px solid #00D600;height: 17px;border-radius: 3px;cursor: pointer;margin-top: -14px;box-shadow: 1px 1px 1px #00D600, 0px 0px 1px #00D600;"type="range" id = "volume" onchange = "setVolume();" min="0" max="100" step="1" value="100"/> 
+</div>
+</td></tr></table>
+</td></tr></table>
+<button type="button" style="font-size:50px;width:100%; height: 90px; border-radius: 3px;border: 1px solid #00D600;background:#000000;color: #00D600" onclick="nextTrack()">Следующий трек</button>
+<button type="button" style="font-size:50px;width:100%;height: 90px; border-radius: 3px;border: 1px solid #00D600;background:#000000;color: #00D600" onclick="pause();">Пауза/воспроизведение</button>
+</body>
+</html>

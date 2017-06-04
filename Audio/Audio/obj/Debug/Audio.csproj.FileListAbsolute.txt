@@ -1,0 +1,9 @@
+C:\Users\bibiw1\Documents\Visual Studio 2015\Projects\Audio\Audio\bin\Debug\Audio.exe.config
+C:\Users\bibiw1\Documents\Visual Studio 2015\Projects\Audio\Audio\obj\Debug\Audio.exe
+C:\Users\bibiw1\Documents\Visual Studio 2015\Projects\Audio\Audio\obj\Debug\Audio.pdb
+C:\Users\bibiw1\Documents\Visual Studio 2015\Projects\Audio\Audio\bin\Debug\Audio.exe
+C:\Users\bibiw1\Documents\Visual Studio 2015\Projects\Audio\Audio\bin\Debug\Audio.pdb
+C:\Users\bibiw1\Documents\Visual Studio 2015\Projects\Audio\Audio\bin\Debug\NAudio.dll
+C:\Users\bibiw1\Documents\Visual Studio 2015\Projects\Audio\Audio\bin\Debug\NAudio.xml
+C:\Users\bibiw1\Documents\Visual Studio 2015\Projects\Audio\Audio\obj\Debug\Audio.csprojResolveAssemblyReference.cache
+C:\Users\bibiw1\Documents\Visual Studio 2015\Projects\Audio\Audio\bin\Debug\NAudio.Flac.dll
